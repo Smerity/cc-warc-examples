@@ -30,7 +30,7 @@ public class WordCounter {
 			for (ArchiveRecord r : value) {
 				try {
 					context.getCounter(MAPPERCOUNTER.RECORDS_IN).increment(1);
-					System.out.println(r.getHeader().getUrl() + " -- " + r.available());
+					LOG.debug(r.getHeader().getUrl() + " -- " + r.available());
 					byte[] rawData = IOUtils.toByteArray(r, r.available());
 					String content = new String(rawData);
 					if (r.getHeader().getMimetype().equals("text/plain")) {

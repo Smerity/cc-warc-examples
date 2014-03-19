@@ -2,7 +2,6 @@ package org.commoncrawl.examples;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.archive.io.ArchiveReader;
 import org.archive.io.ArchiveRecord;
 import org.archive.io.warc.WARCReaderFactory;

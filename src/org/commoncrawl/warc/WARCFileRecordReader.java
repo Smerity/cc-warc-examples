@@ -14,7 +14,6 @@ import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.archive.io.ArchiveReader;
 import org.archive.io.warc.WARCReaderFactory;
 
-
 public class WARCFileRecordReader extends RecordReader<Text, ArchiveReader> {
 	private String arPath;
 	private ArchiveReader ar;
@@ -32,7 +31,7 @@ public class WARCFileRecordReader extends RecordReader<Text, ArchiveReader> {
 		arPath = path.getName();
 		ar = WARCReaderFactory.get(path.getName(), fsin, true);
 	}
-	
+
 	@Override
 	public void close() throws IOException {
 		fsin.close();
