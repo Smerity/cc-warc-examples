@@ -8,13 +8,13 @@ import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.archive.io.ArchiveRecord;
+import org.archive.io.ArchiveReader;
 
 
-public class WARCFileInputFormat extends FileInputFormat<Text, ArchiveRecord> {
+public class WARCFileInputFormat extends FileInputFormat<Text, ArchiveReader> {
 
 	@Override
-	public RecordReader<Text, ArchiveRecord> createRecordReader(InputSplit split, TaskAttemptContext context)
+	public RecordReader<Text, ArchiveReader> createRecordReader(InputSplit split, TaskAttemptContext context)
 			throws IOException, InterruptedException {
 		return new WARCFileRecordReader();
 	}
