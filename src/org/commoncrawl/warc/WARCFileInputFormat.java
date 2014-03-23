@@ -21,6 +21,7 @@ public class WARCFileInputFormat extends FileInputFormat<Text, ArchiveReader> {
 	
 	@Override
 	protected boolean isSplitable(JobContext context, Path filename) {
+		// As these are compressed files, they cannot be (sanely) split
 		return false;
 	}
 }

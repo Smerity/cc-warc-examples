@@ -40,6 +40,7 @@ public class WARCFileRecordReader extends RecordReader<Text, ArchiveReader> {
 
 	@Override
 	public Text getCurrentKey() throws IOException, InterruptedException {
+		// Provide the path used for the compressed file as the key
 		return new Text(arPath);
 	}
 
@@ -57,6 +58,7 @@ public class WARCFileRecordReader extends RecordReader<Text, ArchiveReader> {
 
 	@Override
 	public boolean nextKeyValue() throws IOException, InterruptedException {
+		// As each file only produces one ArchiveReader, if it has been read, there are no more
 		if (hasBeenRead) {
 			return false;
 		}
