@@ -14,6 +14,13 @@ import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.archive.io.ArchiveReader;
 import org.archive.io.warc.WARCReaderFactory;
 
+/**
+ * The WARC File Record Reader processes a single compressed input.
+ * The Record Reader returns a single WARC ArchiveReader that can contain
+ * numerous individual documents, each document handled in a single mapper.
+ *
+ * @author Stephen Merity (Smerity)
+ */
 public class WARCFileRecordReader extends RecordReader<Text, ArchiveReader> {
 	private String arPath;
 	private ArchiveReader ar;
@@ -46,6 +53,7 @@ public class WARCFileRecordReader extends RecordReader<Text, ArchiveReader> {
 
 	@Override
 	public ArchiveReader getCurrentValue() throws IOException, InterruptedException {
+		// We only ever have one value to give -- the output of the compressed file
 		return ar;
 	}
 
