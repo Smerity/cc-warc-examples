@@ -1,4 +1,4 @@
-package org.commoncrawl.examples;
+package org.commoncrawl.examples.mapreduce;
 
 import java.io.IOException;
 
@@ -12,8 +12,8 @@ import org.archive.io.ArchiveRecord;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CatalogueServers {
-	private static final Logger LOG = Logger.getLogger(CatalogueServers.class);
+public class ServerTypeMap {
+	private static final Logger LOG = Logger.getLogger(ServerTypeMap.class);
 	protected static enum MAPPERCOUNTER {
 		RECORDS_IN,
 		NO_SERVER,
@@ -33,6 +33,7 @@ public class CatalogueServers {
 				}
 				try {
 					context.getCounter(MAPPERCOUNTER.RECORDS_IN).increment(1);
+					// Convenience function that reads the full message into a raw byte array
 					byte[] rawData = IOUtils.toByteArray(r, r.available());
 					String content = new String(rawData);
 					JSONObject json = new JSONObject(content);
@@ -41,6 +42,8 @@ public class CatalogueServers {
 						outKey.set(server);
 						context.write(outKey, outVal);
 					} catch (JSONException ex) {
+						// If we reach here, the JSON object didn't have the header we were looking for
+						// There are likely better ways to check for json["Envelope"]["Payload-Metadata"][...] but this is concise
 					}
 				}
 				catch (Exception ex) {

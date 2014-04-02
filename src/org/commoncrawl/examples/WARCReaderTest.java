@@ -2,17 +2,24 @@ package org.commoncrawl.examples;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import org.apache.commons.io.IOUtils;
 import org.archive.io.ArchiveReader;
 import org.archive.io.ArchiveRecord;
 import org.archive.io.warc.WARCReaderFactory;
 
+/**
+ * A raw example of how to process a WARC file using the org.archive.io package.
+ * Common Crawl S3 bucket without credentials using JetS3t.
+ *
+ * @author Stephen Merity (Smerity)
+ */
 public class WARCReaderTest {
 	/**
 	 * @param args
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		// Set up the local compressed WARC file for reading 
+		// Set up a local compressed WARC file for reading 
 		String fn = "data/CC-MAIN-20131204131715-00000-ip-10-33-133-15.ec2.internal.warc.gz";
 		FileInputStream is = new FileInputStream(fn);
 		// The file name identifies the ArchiveReader and indicates if it should be decompressed
@@ -27,10 +34,8 @@ public class WARCReaderTest {
 			System.out.println();
 			
 			// If we want to read the contents of the record, we can use the ArchiveRecord as an InputStream
-			// Create a byte array that is as long as all the record's stated length
-			byte[] rawData = new byte[r.available()];
-			r.read(rawData);
-			// Note: potential optimization would be to have a large buffer only allocated once
+			// Create a byte array that is as long as the record's stated length
+			byte[] rawData = IOUtils.toByteArray(r, r.available());
 			
 			// Why don't we convert it to a string and print the start of it? Let's hope it's text!
 			String content = new String(rawData);

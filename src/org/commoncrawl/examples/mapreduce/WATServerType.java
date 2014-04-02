@@ -1,4 +1,4 @@
-package org.commoncrawl.examples;
+package org.commoncrawl.examples.mapreduce;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -16,14 +16,19 @@ import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 import org.commoncrawl.warc.WARCFileInputFormat;
 
-public class WARCMapReduceTest extends Configured implements Tool {
-	private static final Logger LOG = Logger.getLogger(WARCMapReduceTest.class);
+/**
+ * Server count example using the response metadata (WAT) from the Common Crawl dataset.
+ *
+ * @author Stephen Merity (Smerity)
+ */
+public class WATServerType extends Configured implements Tool {
+	private static final Logger LOG = Logger.getLogger(WATServerType.class);
 	
 	/**
 	 * Main entry point that uses the {@link ToolRunner} class to run the Hadoop job. 
 	 */
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(new Configuration(), new WARCMapReduceTest(), args);
+		int res = ToolRunner.run(new Configuration(), new WATServerType(), args);
 		System.exit(res);
 	}
 
@@ -36,13 +41,13 @@ public class WARCMapReduceTest extends Configured implements Tool {
 		Configuration conf = getConf();
 		//
 		Job job = new Job(conf);
-		job.setJarByClass(WARCMapReduceTest.class);
+		job.setJarByClass(WATServerType.class);
 		job.setNumReduceTasks(1);
 		
-		String inputPath = "data/*.warc.gz";
+		String inputPath = "data/*.warc.wat.gz";
 		//inputPath = "s3n://aws-publicdatasets/common-crawl/crawl-data/CC-MAIN-2013-48/segments/1386163035819/wet/CC-MAIN-20131204131715-00000-ip-10-33-133-15.ec2.internal.warc.wet.gz";
 		//inputPath = "s3n://aws-publicdatasets/common-crawl/crawl-data/CC-MAIN-2013-48/segments/1386163035819/wet/*.warc.wet.gz";
-		LOG.info("Input path: "+ inputPath);
+		LOG.info("Input path: " + inputPath);
 		FileInputFormat.addInputPath(job, new Path(inputPath));
 		
 		String outputPath = "/tmp/cc/";
@@ -51,17 +56,20 @@ public class WARCMapReduceTest extends Configured implements Tool {
 			fs.delete(new Path(outputPath), true);
 		}
 		FileOutputFormat.setOutputPath(job, new Path(outputPath));
-
+		
 		job.setInputFormatClass(WARCFileInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
-
+		
 		job.setOutputKeyClass(Text.class);
 	    job.setOutputValueClass(LongWritable.class);
 	    
-	    job.setMapperClass(TagCounter.TagCounterMapper.class);
+	    job.setMapperClass(ServerTypeMap.ServerMapper.class);
 	    job.setReducerClass(LongSumReducer.class);
-	    job.setReducerClass(LongSumReducer.class);
-
-	    return job.waitForCompletion(true) ? 0 : -1;
+		
+	    if (job.waitForCompletion(true)) {
+	    	return 0;
+	    } else {
+	    	return 1;
+	    }
 	}
 }

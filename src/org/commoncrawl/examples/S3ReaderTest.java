@@ -9,12 +9,13 @@ import org.jets3t.service.S3ServiceException;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
 import org.jets3t.service.model.S3Object;
 
+/**
+ * This is a raw example of how you can retrieve a file from the
+ * Common Crawl S3 bucket without credentials using JetS3t.
+ *
+ * @author Stephen Merity (Smerity)
+ */
 public class S3ReaderTest {
-	/**
-	 * @param args
-	 * @throws IOException 
-	 * @throws S3ServiceException 
-	 */
 	public static void main(String[] args) throws IOException, S3ServiceException {
 		// We're accessing a publicly available bucket so don't need to fill in our credentials
 		S3Service s3s = new RestS3Service(null);
