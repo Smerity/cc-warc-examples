@@ -33,9 +33,8 @@ public class ServerTypeMap {
 				}
 				try {
 					context.getCounter(MAPPERCOUNTER.RECORDS_IN).increment(1);
-					// Convenience function that reads the full message into a raw byte array
-					byte[] rawData = IOUtils.toByteArray(r, r.available());
-					String content = new String(rawData);
+					// Read full message into a string.
+					String content = IOUtils.toString(r);;
 					JSONObject json = new JSONObject(content);
 					try {
 						String server = json.getJSONObject("Envelope").getJSONObject("Payload-Metadata").getJSONObject("HTTP-Response-Metadata").getJSONObject("Headers").getString("Server");
